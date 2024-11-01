@@ -1,6 +1,8 @@
-﻿namespace Entities.DTOs
+﻿using Entities.Base;
+
+namespace Entities.DTOs
 {
-    public class CargoDto
+    public class CargoDto : EntityBaseDto
     {
         public string Title { get; set; }
         public int Weight { get; set; }

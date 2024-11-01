@@ -1,6 +1,6 @@
 ﻿namespace Entities.Base
 {
-    public abstract class EntityBase
+    public abstract class EntityBaseDto
     {
         public Guid? Id { get; set; }
     }

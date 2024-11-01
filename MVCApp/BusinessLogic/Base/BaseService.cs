@@ -8,7 +8,7 @@ namespace BusinessLogic.Base
 {
     public class BaseService<TDb, TDto> : IBaseEntityService<TDb, TDto>
         where TDb : EntityBase
-        where TDto : class
+        where TDto : EntityBaseDto
     {
         protected readonly IRepositoryBase<TDb> _repository;
         protected readonly IMapperService _mapperService;
@@ -29,6 +29,30 @@ namespace BusinessLogic.Base
             var entitiesDtos = _mapperService.Map<IEnumerable<TDb>, IEnumerable<TDto>>(entities);
 
             return new PagedList<TDto>(entitiesDtos.ToList(), count, parameters.page, parameters.pageSize);
+        }
+        public async Task<TDto> GetByIdAsync(Guid id)
+        {
+            var dbEntity = await _repository.FindByIdAsync(id);
+
+            return _mapperService.Map<TDb, TDto>(dbEntity);
+        }
+
+        public async Task<TDto> CreateAsync(TDto dto)
+        {
+            var mapEntity = _mapperService.Map<TDto, TDb>(dto);
+
+            var dbEntity = await _repository.CreateAsync(mapEntity);
+
+            return _mapperService.Map<TDb, TDto>(dbEntity);
+        }
+        public async Task DeleteByIdAsync(Guid id) => await _repository.DeleteByIdAsync(id);
+        public async Task<TDto> UpdateAsync(TDto dto)
+        {
+            var mapEntity = _mapperService.Map<TDto, TDb>(dto);
+
+            var dbEntity = await _repository.UpdateAsync(mapEntity);
+
+            return _mapperService.Map<TDb, TDto>(dbEntity);
         }
     }
 }

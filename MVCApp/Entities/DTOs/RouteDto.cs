@@ -1,6 +1,8 @@
-﻿namespace Entities.DTOs
+﻿using Entities.Base;
+
+namespace Entities.DTOs
 {
-    public class RouteDto
+    public class RouteDto : EntityBaseDto
     {
         public SettlementDto? StartSettlement { get; set; }
 

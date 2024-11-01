@@ -1,6 +1,8 @@
-﻿namespace Entities.DTOs
+﻿using Entities.Base;
+
+namespace Entities.DTOs
 {
-    public class SettlementDto
+    public class SettlementDto : EntityBaseDto
     {
         public string Title { get; set; }
     }
