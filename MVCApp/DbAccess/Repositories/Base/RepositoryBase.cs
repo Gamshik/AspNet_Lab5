@@ -3,6 +3,7 @@ using DbAccess.Context;
 using Entities.Base;
 using Entities.Exceptions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using System.Linq.Expressions;
 
 namespace DbAccess.Repositories.Base
@@ -66,5 +67,9 @@ namespace DbAccess.Repositories.Base
 
         public virtual void SaveChanges() => _context.SaveChanges();
         public virtual Task SaveChangesAsync() => _context.SaveChangesAsync();
+
+        public async Task<IDbContextTransaction> CreateTransactionAsync() => await _context.Database.BeginTransactionAsync();
+
+        public IDbContextTransaction CreateTransaction() => _context.Database.BeginTransaction();
     }
 }

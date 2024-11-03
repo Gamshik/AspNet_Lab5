@@ -11,5 +11,13 @@ namespace Entities.Models.DTOs
         [Required(ErrorMessage = "Route Distance is required.")]
         [Range(1, int.MaxValue, ErrorMessage = "Route Distance must be a positive number.")]
         public int Distance { get; set; }
+
+        public ValidationResult ValidateSettlements()
+        {
+            if (StartSettlementId == EndSettlementId)
+                return new ValidationResult("Start and End settlements must be different.");
+
+            return ValidationResult.Success!;
+        }
     }
 }

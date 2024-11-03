@@ -1,4 +1,5 @@
 ﻿using Entities.Base;
+using Microsoft.EntityFrameworkCore.Storage;
 using System.Linq.Expressions;
 
 namespace Contracts.Repositories.Base
@@ -16,5 +17,7 @@ namespace Contracts.Repositories.Base
         Task DeleteByIdAsync(Guid id);
         void SaveChanges();
         Task SaveChangesAsync();
+        Task<IDbContextTransaction> CreateTransactionAsync();
+        IDbContextTransaction CreateTransaction();
     }
 }

@@ -3,6 +3,7 @@ using Entities.Models.DTOs;
 using Entities.Pagination;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using System.ComponentModel.DataAnnotations;
 
 namespace MVCApp.Controllers
 {
@@ -60,6 +61,16 @@ namespace MVCApp.Controllers
                 ViewBag.Settlements = new SelectList(settlements, "Id", "Title");
                 return View(dto);
             }
+
+            var validationResult = dto.ValidateSettlements();
+            if (validationResult != ValidationResult.Success)
+            {
+                ModelState.AddModelError("", validationResult.ErrorMessage!);
+                var settlements = _settlementService.GetAll<SettlementDto>();
+                ViewBag.Settlements = new SelectList(settlements, "Id", "Title");
+                return View("CreateView", dto);
+            }
+
 
             await _routeService.CreateAsync<RouteCreateDto, RouteDto>(dto);
             return RedirectToAction("Index", new { page = 1, pageSize = 10 });

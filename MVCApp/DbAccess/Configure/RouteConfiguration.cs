@@ -27,6 +27,9 @@ namespace DbAccess.Configure
                 .WithMany(s => s.RouteEndSettlements)
                 .HasForeignKey(r => r.EndSettlementId)
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder
+                .ToTable(r => r.HasCheckConstraint("CK_Route_DifferentSettlements", "[StartSettlementId] <> [EndSettlementId]"));
         }
     }
 }

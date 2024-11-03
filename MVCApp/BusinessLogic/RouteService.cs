@@ -11,10 +11,10 @@ namespace BusinessLogic
 {
     public class RouteService : BaseService<Route>, IRouteService
     {
-        private readonly ISettlementService _settlementService;
-        public RouteService(IRouteRepository repository, ISettlementService settlementService, IMapperService mapperService) : base(repository, mapperService)
+        private readonly ISettlementRepository _settlementRepository;
+        public RouteService(IRouteRepository repository, ISettlementRepository settlementRepository, IMapperService mapperService) : base(repository, mapperService)
         {
-            _settlementService = settlementService;
+            _settlementRepository = settlementRepository;
         }
 
         public override PagedList<TDto> GetByPage<TDto>(PaginationQueryParameters parameters)
@@ -37,8 +37,8 @@ namespace BusinessLogic
             if (typedDto == null)
                 throw new BadRequestException("Dto is wrong format.");
 
-            var startSettlement = await _settlementService.GetByIdAsync<Settlement>(typedDto.StartSettlementId);
-            var endSettlement = await _settlementService.GetByIdAsync<Settlement>(typedDto.EndSettlementId);
+            var startSettlement = await _settlementRepository.FindByIdAsync(typedDto.StartSettlementId);
+            var endSettlement = await _settlementRepository.FindByIdAsync(typedDto.EndSettlementId);
 
             var newRoute = _mapperService.Map<RouteCreateDto, Route>(typedDto);
 

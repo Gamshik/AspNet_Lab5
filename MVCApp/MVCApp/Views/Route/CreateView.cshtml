@@ -9,7 +9,11 @@
     <h2 class="formTitle">Create New Route</h2>
 
     @using (Html.BeginForm("Create", "Route"))
-        {
+    {
+        <div class="fieldContainer">
+            @Html.ValidationSummary(false, "", new { @class = "validationErrorText" })
+        </div>
+
         <div class="fieldContainer">
             <label class="fieldLabel" for="distance">Distance</label>
             @Html.TextBoxFor(m => m.Distance, new { @class = "formField", type = "number", min = "1" })

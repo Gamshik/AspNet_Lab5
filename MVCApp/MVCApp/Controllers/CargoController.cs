@@ -1,5 +1,4 @@
-﻿using BusinessLogic;
-using Contracts.Services;
+﻿using Contracts.Services;
 using Entities;
 using Entities.Models.DTOs;
 using Entities.Pagination;
