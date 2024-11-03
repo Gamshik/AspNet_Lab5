@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Entities;
-using Entities.DTOs;
+using Entities.Models.DTOs;
 
 namespace MapperHelper.Profiles
 {

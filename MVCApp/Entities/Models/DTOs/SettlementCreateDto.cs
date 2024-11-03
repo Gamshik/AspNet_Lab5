@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Entities.DTOs
+namespace Entities.Models.DTOs
 {
     public class SettlementCreateDto
     {

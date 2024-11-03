@@ -1,6 +1,6 @@
 ﻿using Entities.Base;
 
-namespace Entities.DTOs
+namespace Entities.Models.DTOs
 {
     public class SettlementDto : EntityBaseDto
     {

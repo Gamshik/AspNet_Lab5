@@ -1,26 +1,39 @@
-﻿@using Entities.DTOs;
+﻿@model IEnumerable<CargoDto>
 
-@model IEnumerable<CargoDto>
+@{
+    var controllerInfo = new ControllerInfo
+            {
+                ControllerName = ViewBag.ControllerName,
+                ViewActionName = ViewBag.ViewActionName,
+                CreateActionName = ViewBag.CreateActionName,
+                DeleteActionName = ViewBag.DeleteActionName,
+                UpdateActionName = ViewBag.UpdateActionName,
+            };
+
+    var paginationModel = new TablePagination
+            {
+                ControllerInfo = controllerInfo,
+                CurrentPage = ViewBag.CurrentPage,
+                PageSize = ViewBag.PageSize,
+                TotalSize = ViewBag.TotalSize,
+                HaveNext = ViewBag.HaveNext,
+                HavePrev = ViewBag.HavePrev,
+            };
+
+    var tableHelperModel = new TableHelper
+            {
+                ControllerInfo = controllerInfo,
+                TableTitle = "Cargo List",
+                EntityName = "Cargo",
+            };
+}
 
 @section Styles {
     <link rel="stylesheet" href="~/scss/Cargo/index.min.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/scss/General/entityTable.min.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/scss/General/buttonStyles.min.css" asp-append-version="true" />
 }
 
-<div class="tableHelper">
-    <h2>Cargos List</h2>
 
-    <div class="tableHelperButtons">
-        <a class="defaultButton" href="@Url.Action("CreateView")">Create cargo</a>
-
-        <form method="get" action="@Url.Action("Index")" class="pageSizeForm">
-            <input type="hidden" name="page" value="@ViewBag.CurrentPage" />
-            <input type="number" name="pageSize" value="@ViewBag.PageSize" min="1" max="@ViewBag.TotalSize" class="numberField" />
-            <button type="submit" class="defaultButton">Set Page Size</button>
-        </form>
-    </div>
-</div>
+@await Html.PartialAsync("_EntityTableHelperPartial", tableHelperModel)
 
 <table class="entityTable">
     <thead>
@@ -28,39 +41,37 @@
             <th>Title</th>
             <th>Weight (kg)</th>
             <th>Registration Number</th>
+            <th>Delete action</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var cargo in Model)
         {
             <tr>
+                @{
+                    var popUpId = $"delete-cargo-{cargo.Id}";
+                    var deleteEntityModel = new DeleteEntity
+                            {
+                                ControllerInfo = controllerInfo,
+                                Id = cargo.Id,
+                                PopUpId = popUpId,
+                                ItemName = $"{cargo.Title}",
+                            };
+                }
                 <td>@cargo.Title</td>
                 <td>@cargo.Weight</td>
                 <td>@cargo.RegistrationNumber</td>
+                <td>
+                    <button class="defaultButton" onclick="openModal('@popUpId')">
+                        Delete
+                    </button>
+                    <div id="@popUpId" style="display: none; position: absolute;">
+                        @await Html.PartialAsync("_DeleteEntityConfirmPopUpPartial", deleteEntityModel)
+                    </div>
+                </td>
             </tr>
         }
     </tbody>
 </table>
 
-<div class="pagination">
-    @if (ViewBag.HavePrev)
-    {
-        <a class="defaultButton" href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1, pageSize = ViewBag.PageSize })">Previous</a>
-    }
-    else
-    {
-        <button class="defaultButton" disabled>Previous</button>
-    }
-
-    <span class="current-page">Page @ViewBag.CurrentPage</span>
-
-
-    @if (ViewBag.HaveNext)
-    {
-        <a class="defaultButton" href="@Url.Action("Index", new { Page = ViewBag.CurrentPage + 1, PageSize = ViewBag.PageSize })">Next</a>
-    }
-    else
-    {
-        <button class="defaultButton" disabled>Next</button>
-    }
-</div>
+@await Html.PartialAsync("_EntityTablePaginationPartial", paginationModel)

@@ -1,5 +1,5 @@
 ﻿using Contracts.Services;
-using Entities.DTOs;
+using Entities.Models.DTOs;
 using Entities.Pagination;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -35,6 +35,12 @@ namespace MVCApp.Controllers
             ViewBag.HaveNext = routes.MetaData.HaveNext;
             ViewBag.HavePrev = routes.MetaData.HavePrev;
 
+            ViewBag.ControllerName = "Route";
+            ViewBag.ViewActionName = "routes";
+            ViewBag.CreateActionName = "create-route-view";
+            ViewBag.DeleteActionName = "delete-route";
+            ViewBag.UpdateActionName = "UpdateView";
+
             return View(routes);
         }
         [HttpGet("create", Name = "create-route-view")]
@@ -56,6 +62,12 @@ namespace MVCApp.Controllers
             }
 
             await _routeService.CreateAsync<RouteCreateDto, RouteDto>(dto);
+            return RedirectToAction("Index", new { page = 1, pageSize = 10 });
+        }
+        [HttpPost("delete-route", Name = "delete-route")]
+        public async Task<IActionResult> Delete([FromForm] RouteDeleteDto dto)
+        {
+            await _routeService.DeleteByIdAsync(dto.Id);
             return RedirectToAction("Index", new { page = 1, pageSize = 10 });
         }
     }

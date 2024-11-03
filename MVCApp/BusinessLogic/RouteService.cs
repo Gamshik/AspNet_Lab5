@@ -3,8 +3,8 @@ using Contracts.Mapper;
 using Contracts.Repositories;
 using Contracts.Services;
 using Entities;
-using Entities.DTOs;
 using Entities.Exceptions;
+using Entities.Models.DTOs;
 using Entities.Pagination;
 
 namespace BusinessLogic

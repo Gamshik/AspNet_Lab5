@@ -38,5 +38,9 @@
   {
     "outputFile": "wwwroot/scss/General/formStyles.css",
     "inputFile": "wwwroot/scss/General/formStyles.scss"
+  },
+  {
+    "outputFile": "wwwroot/scss/General/deleteModalStyles.css",
+    "inputFile": "wwwroot/scss/General/deleteModalStyles.scss"
   }
 ]
