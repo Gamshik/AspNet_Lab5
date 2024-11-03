@@ -3,6 +3,7 @@ using Entities.Models.DTOs;
 using Entities.Pagination;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.IdentityModel.Tokens;
 using System.ComponentModel.DataAnnotations;
 
 namespace MVCApp.Controllers
@@ -40,7 +41,7 @@ namespace MVCApp.Controllers
             ViewBag.ViewActionName = "routes";
             ViewBag.CreateActionName = "create-route-view";
             ViewBag.DeleteActionName = "delete-route";
-            ViewBag.UpdateActionName = "UpdateView";
+            ViewBag.UpdateActionName = "update-route-view";
 
             return View(routes);
         }
@@ -48,7 +49,6 @@ namespace MVCApp.Controllers
         public IActionResult CreateView()
         {
             var settlements = _settlementService.GetAll<SettlementDto>();
-            Console.WriteLine(settlements);
             ViewBag.Settlements = new SelectList(settlements, "Id", "Title");
             return View();
         }
@@ -79,6 +79,24 @@ namespace MVCApp.Controllers
         public async Task<IActionResult> Delete([FromForm] RouteDeleteDto dto)
         {
             await _routeService.DeleteByIdAsync(dto.Id);
+            return RedirectToAction("Index", new { page = 1, pageSize = 10 });
+        }
+        [HttpGet("update", Name = "update-route-view")]
+        public async Task<IActionResult> UpdateView([FromQuery] Guid id)
+        {
+            var settlements = _settlementService.GetAll<SettlementDto>();
+            ViewBag.Settlements = new SelectList(settlements, "Id", "Title");
+
+            var route = await _routeService.GetByIdAsync<RouteUpdateDto>(id);
+            return View(route);
+        }
+        [HttpPost("update", Name = "update-route")]
+        public async Task<IActionResult> Update([FromForm] RouteUpdateDto dto)
+        {
+            if (!ModelState.IsValid || dto.Id.ToString().IsNullOrEmpty())
+                return View("UpdateView", dto);
+
+            await _routeService.UpdateAsync<RouteUpdateDto, RouteDto>(dto);
             return RedirectToAction("Index", new { page = 1, pageSize = 10 });
         }
     }

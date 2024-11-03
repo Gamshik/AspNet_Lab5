@@ -2,6 +2,7 @@
 using Entities.Models.DTOs;
 using Entities.Pagination;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace MVCApp.Controllers
 {
@@ -36,13 +37,13 @@ namespace MVCApp.Controllers
             ViewBag.ViewActionName = "settlements";
             ViewBag.CreateActionName = "create-settlement-view";
             ViewBag.DeleteActionName = "delete-settlement";
-            ViewBag.UpdateActionName = "UpdateView";
+            ViewBag.UpdateActionName = "update-settlement-view";
 
             return View(settlements);
         }
         [HttpGet("create", Name = "create-settlement-view")]
         public IActionResult CreateView() => View();
-        [HttpPost("", Name = "create-settlement")]
+        [HttpPost("create", Name = "create-settlement")]
         public async Task<IActionResult> Create([FromForm] SettlementCreateDto dto)
         {
             if (!ModelState.IsValid)
@@ -55,6 +56,21 @@ namespace MVCApp.Controllers
         public async Task<IActionResult> Delete([FromForm] SettlementDeleteDto dto)
         {
             await _settlementService.DeleteByIdAsync(dto.Id);
+            return RedirectToAction("Index", new { page = 1, pageSize = 10 });
+        }
+        [HttpGet("update", Name = "update-settlement-view")]
+        public async Task<IActionResult> UpdateView([FromQuery] Guid id)
+        {
+            var settlement = await _settlementService.GetByIdAsync<SettlementUpdateDto>(id);
+            return View(settlement);
+        }
+        [HttpPost("update", Name = "update-settlement")]
+        public async Task<IActionResult> Update([FromForm] SettlementUpdateDto dto)
+        {
+            if (!ModelState.IsValid || dto.Id.ToString().IsNullOrEmpty())
+                return View("UpdateView", dto);
+
+            await _settlementService.UpdateAsync<SettlementUpdateDto, SettlementDto>(dto);
             return RedirectToAction("Index", new { page = 1, pageSize = 10 });
         }
     }

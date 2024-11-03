@@ -39,7 +39,7 @@
     <thead>
         <tr>
             <th>Title</th>
-            <th>Delete action</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -55,6 +55,11 @@
                                 PopUpId = popUpId,
                                 ItemName = settlement.Title,
                             };
+
+                    var updateActionParameters = new Dictionary<string, string>
+                            {
+                                { "id", $"{settlement.Id}" }
+                            };
                 }
                 <td>@settlement.Title</td>
                 <td>
@@ -64,6 +69,7 @@
                     <div id="@popUpId" style="display: none; position: absolute;">
                         @await Html.PartialAsync("_DeleteEntityConfirmPopUpPartial", deleteEntityModel)
                     </div>
+                    <a class="defaultButton" asp-route="@ViewBag.UpdateActionName" asp-all-route-data="updateActionParameters">Update</a>
                 </td>
             </tr>
         }

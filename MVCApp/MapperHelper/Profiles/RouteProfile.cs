@@ -10,6 +10,7 @@ namespace MapperHelper.Profiles
         {
             CreateMap<Route, RouteDto>();
             CreateMap<RouteCreateDto, Route>().ReverseMap();
+            CreateMap<RouteUpdateDto, Route>().ReverseMap();
         }
     }
 }

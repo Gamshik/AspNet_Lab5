@@ -10,7 +10,7 @@ namespace Contracts.Services.Base
         PagedList<TDto> GetByPage<TDto>(PaginationQueryParameters parameters);
         Task<TDto> GetByIdAsync<TDto>(Guid id);
         Task<TDtoResult> CreateAsync<TDtoNewEntity, TDtoResult>(TDtoNewEntity dto);
-        Task<TDto> UpdateAsync<TDto>(TDto dto);
+        Task<TDtoResult> UpdateAsync<TDtoUpdateEntity, TDtoResult>(TDtoUpdateEntity dto);
         Task DeleteByIdAsync(Guid id);
     }
 }

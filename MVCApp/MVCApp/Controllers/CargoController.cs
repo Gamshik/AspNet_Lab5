@@ -1,8 +1,10 @@
-﻿using Contracts.Services;
+﻿using BusinessLogic;
+using Contracts.Services;
 using Entities;
 using Entities.Models.DTOs;
 using Entities.Pagination;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace MVCApp.Controllers
 {
@@ -37,7 +39,7 @@ namespace MVCApp.Controllers
             ViewBag.ViewActionName = "cargos";
             ViewBag.CreateActionName = "create-cargo-view";
             ViewBag.DeleteActionName = "delete-cargo";
-            ViewBag.UpdateActionName = "UpdateView";
+            ViewBag.UpdateActionName = "update-cargo-view";
 
 
             return View(cargos);
@@ -57,6 +59,21 @@ namespace MVCApp.Controllers
         public async Task<IActionResult> Delete([FromForm] CargoDeleteDto dto)
         {
             await _cargoService.DeleteByIdAsync(dto.Id);
+            return RedirectToAction("Index", new { page = 1, pageSize = 10 });
+        }
+        [HttpGet("update", Name = "update-cargo-view")]
+        public async Task<IActionResult> UpdateView([FromQuery] Guid id)
+        {
+            var cargo = await _cargoService.GetByIdAsync<CargoUpdateDto>(id);
+            return View(cargo);
+        }
+        [HttpPost("update", Name = "update-cargo")]
+        public async Task<IActionResult> Update([FromForm] CargoUpdateDto dto)
+        {
+            if (!ModelState.IsValid || dto.Id.ToString().IsNullOrEmpty())
+                return View("UpdateView", dto);
+
+            await _cargoService.UpdateAsync<CargoUpdateDto, CargoDto>(dto);
             return RedirectToAction("Index", new { page = 1, pageSize = 10 });
         }
     }

@@ -6,6 +6,7 @@ namespace Entities.Models.Partial
     {
         public ControllerInfo ControllerInfo { get; set; }
         public string TableTitle { get; set; }
+        public string EntityId { get; set; }
         public string EntityName { get; set; }
     }
 }

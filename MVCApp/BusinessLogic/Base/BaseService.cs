@@ -52,13 +52,13 @@ namespace BusinessLogic.Base
             return _mapperService.Map<TDb, TDtoResult>(dbEntity);
         }
         public virtual async Task DeleteByIdAsync(Guid id) => await _repository.DeleteByIdAsync(id);
-        public virtual async Task<TDto> UpdateAsync<TDto>(TDto dto)
+        public virtual async Task<TDtoResult> UpdateAsync<TDtoUpdateEntity, TDtoResult>(TDtoUpdateEntity dto)
         {
-            var mapEntity = _mapperService.Map<TDto, TDb>(dto);
+            var mapEntity = _mapperService.Map<TDtoUpdateEntity, TDb>(dto);
 
             var dbEntity = await _repository.UpdateAsync(mapEntity);
 
-            return _mapperService.Map<TDb, TDto>(dbEntity);
+            return _mapperService.Map<TDb, TDtoResult>(dbEntity);
         }
     }
 }

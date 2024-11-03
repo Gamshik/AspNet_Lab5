@@ -10,6 +10,7 @@ namespace MapperHelper.Profiles
         {
             CreateMap<Cargo, CargoDto>();
             CreateMap<CargoCreateDto, Cargo>().ReverseMap();
+            CreateMap<CargoUpdateDto, Cargo>().ReverseMap();
         }
     }
 }

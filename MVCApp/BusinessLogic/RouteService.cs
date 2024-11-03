@@ -47,5 +47,24 @@ namespace BusinessLogic
 
             return await base.CreateAsync<Route, TDtoResult>(newRoute);
         }
+        public override async Task<TDtoResult> UpdateAsync<TDtoUpdateEntity, TDtoResult>(TDtoUpdateEntity dto)
+        {
+            var typedDto = dto as RouteUpdateDto;
+
+            if (typedDto == null)
+                throw new BadRequestException("Dto is wrong format.");
+
+            var startSettlement = await _settlementRepository.FindByIdAsync(typedDto.StartSettlementId);
+            var endSettlement = await _settlementRepository.FindByIdAsync(typedDto.EndSettlementId);
+
+            var updateRoute = _mapperService.Map<RouteUpdateDto, Route>(typedDto);
+
+            updateRoute.StartSettlement = startSettlement;
+            updateRoute.EndSettlement = endSettlement;
+
+            updateRoute = await _repository.UpdateAsync(updateRoute);
+
+            return _mapperService.Map<Route, TDtoResult>(updateRoute);
+        }
     }
 }

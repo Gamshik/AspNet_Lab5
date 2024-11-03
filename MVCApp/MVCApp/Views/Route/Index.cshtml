@@ -41,7 +41,7 @@
             <th>Start settlement</th>
             <th>End settlement</th>
             <th>Distance</th>
-            <th>Delete action</th>
+            <th>Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -57,6 +57,11 @@
                                 PopUpId = popUpId,
                                 ItemName = $"Route {route.StartSettlement!.Title} - {route.EndSettlement!.Title}",
                             };
+
+                    var updateActionParameters = new Dictionary<string, string>
+                            {
+                                { "id", $"{route.Id}" }
+                            };
                 }
                 <td>@route.StartSettlement?.Title</td>
                 <td>@route.EndSettlement?.Title</td>
@@ -68,6 +73,7 @@
                     <div id="@popUpId" style="display: none; position: absolute;">
                         @await Html.PartialAsync("_DeleteEntityConfirmPopUpPartial", deleteEntityModel)
                     </div>
+                    <a class="defaultButton" asp-route="@ViewBag.UpdateActionName" asp-all-route-data="updateActionParameters">Update</a>
                 </td>
             </tr>
         }
