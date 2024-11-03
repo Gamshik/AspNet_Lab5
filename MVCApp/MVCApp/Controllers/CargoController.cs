@@ -1,5 +1,6 @@
 ﻿using Contracts.Services;
 using Entities;
+using Entities.DTOs;
 using Entities.Pagination;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,7 +21,7 @@ namespace MVCApp.Controllers
         [ResponseCache(CacheProfileName = "EntityCache")]
         public IActionResult Index([FromQuery] PaginationQueryParameters parameters)
         {
-            var cargos = _cargoService.GetByPage(parameters);
+            var cargos = _cargoService.GetByPage<CargoDto>(parameters);
 
             if (cargos == null || !cargos.Any())
                 return NoContent();
@@ -33,6 +34,18 @@ namespace MVCApp.Controllers
             ViewBag.HavePrev = cargos.MetaData.HavePrev;
 
             return View(cargos);
+        }
+        [HttpGet("create", Name = "create-cargo-view")]
+        public IActionResult CreateView() => View();
+
+        [HttpPost("", Name = "create-cargo")]
+        public async Task<IActionResult> Create([FromForm] CargoCreateDto dto)
+        {
+            if (!ModelState.IsValid)
+                return View("CreateView", dto);
+
+            await _cargoService.CreateAsync<CargoCreateDto, CargoDto>(dto);
+            return RedirectToAction("Index", new { page = 1, pageSize = 10 });
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿@using Entities.DTOs
+﻿@using Entities.DTOs;
 
 @model IEnumerable<SettlementDto>
 
@@ -7,14 +7,19 @@
     <link rel="stylesheet" href="~/scss/General/entityTable.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/scss/General/buttonStyles.min.css" asp-append-version="true" />
 }
-
+    
 <div class="tableHelper">
     <h2>Settlement List</h2>
-    <form method="get" action="@Url.Action("Index")" class="pageSizeForm">
-        <input type="hidden" name="page" value="@ViewBag.CurrentPage" />
-        <input type="number" name="pageSize" value="@ViewBag.PageSize" min="1" max="@ViewBag.TotalSize" class="numberField" />
-        <button type="submit" class="defaultButton">Set Page Size</button>
-    </form>
+
+    <div class="tableHelperButtons">
+        <a class="defaultButton" href="@Url.Action("CreateView")">Create settlement</a>
+
+        <form method="get" action="@Url.Action("Index")" class="pageSizeForm">
+            <input type="hidden" name="page" value="@ViewBag.CurrentPage" />
+            <input type="number" name="pageSize" value="@ViewBag.PageSize" min="1" max="@ViewBag.TotalSize" class="numberField" />
+            <button type="submit" class="defaultButton">Set Page Size</button>
+        </form>
+    </div>
 </div>
 
 <table class="entityTable">

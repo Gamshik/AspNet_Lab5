@@ -9,6 +9,7 @@ namespace MapperHelper.Profiles
         public SettlementProfile()
         {
             CreateMap<Settlement, SettlementDto>();
+            CreateMap<SettlementCreateDto, Settlement>().ReverseMap();
         }
     }
 }

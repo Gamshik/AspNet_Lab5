@@ -6,9 +6,8 @@ using Entities.Pagination;
 
 namespace BusinessLogic.Base
 {
-    public class BaseService<TDb, TDto> : IBaseEntityService<TDb, TDto>
+    public class BaseService<TDb> : IBaseEntityService<TDb>
         where TDb : EntityBase
-        where TDto : EntityBaseDto
     {
         protected readonly IRepositoryBase<TDb> _repository;
         protected readonly IMapperService _mapperService;
@@ -17,7 +16,14 @@ namespace BusinessLogic.Base
             _repository = repository;
             _mapperService = mapperService;
         }
-        public virtual PagedList<TDto> GetByPage(PaginationQueryParameters parameters)
+        public virtual IEnumerable<TDto> GetAll<TDto>()
+        {
+            var allDbEntity = _repository.GetAll();
+
+            var dtos = _mapperService.Map<IQueryable<TDb>, IEnumerable<TDto>>(allDbEntity);
+            return dtos;
+        }
+        public virtual PagedList<TDto> GetByPage<TDto>(PaginationQueryParameters parameters)
         {
             var entities = _repository
                 .GetAll()
@@ -30,23 +36,23 @@ namespace BusinessLogic.Base
 
             return new PagedList<TDto>(entitiesDtos.ToList(), count, parameters.page, parameters.pageSize);
         }
-        public async Task<TDto> GetByIdAsync(Guid id)
+        public virtual async Task<TDto> GetByIdAsync<TDto>(Guid id)
         {
             var dbEntity = await _repository.FindByIdAsync(id);
 
             return _mapperService.Map<TDb, TDto>(dbEntity);
         }
 
-        public async Task<TDto> CreateAsync(TDto dto)
+        public virtual async Task<TDtoResult> CreateAsync<TDtoNewEntity, TDtoResult>(TDtoNewEntity dto)
         {
-            var mapEntity = _mapperService.Map<TDto, TDb>(dto);
+            var mapEntity = _mapperService.Map<TDtoNewEntity, TDb>(dto);
 
             var dbEntity = await _repository.CreateAsync(mapEntity);
 
-            return _mapperService.Map<TDb, TDto>(dbEntity);
+            return _mapperService.Map<TDb, TDtoResult>(dbEntity);
         }
-        public async Task DeleteByIdAsync(Guid id) => await _repository.DeleteByIdAsync(id);
-        public async Task<TDto> UpdateAsync(TDto dto)
+        public virtual async Task DeleteByIdAsync(Guid id) => await _repository.DeleteByIdAsync(id);
+        public virtual async Task<TDto> UpdateAsync<TDto>(TDto dto)
         {
             var mapEntity = _mapperService.Map<TDto, TDb>(dto);
 

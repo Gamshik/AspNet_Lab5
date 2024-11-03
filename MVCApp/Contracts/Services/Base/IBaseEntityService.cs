@@ -3,14 +3,14 @@ using Entities.Pagination;
 
 namespace Contracts.Services.Base
 {
-    public interface IBaseEntityService<TDb, TDto>
+    public interface IBaseEntityService<TDb>
         where TDb : EntityBase
-        where TDto : EntityBaseDto
     {
-        PagedList<TDto> GetByPage(PaginationQueryParameters parameters);
-        Task<TDto> GetByIdAsync(Guid id);
-        Task<TDto> CreateAsync(TDto dto);
-        Task<TDto> UpdateAsync(TDto dto);
+        IEnumerable<TDto> GetAll<TDto>();
+        PagedList<TDto> GetByPage<TDto>(PaginationQueryParameters parameters);
+        Task<TDto> GetByIdAsync<TDto>(Guid id);
+        Task<TDtoResult> CreateAsync<TDtoNewEntity, TDtoResult>(TDtoNewEntity dto);
+        Task<TDto> UpdateAsync<TDto>(TDto dto);
         Task DeleteByIdAsync(Guid id);
     }
 }

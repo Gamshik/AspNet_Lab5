@@ -1,0 +1,37 @@
+﻿@model Entities.DTOs.CargoCreateDto
+
+@section Styles {
+    <link rel="stylesheet" href="~/scss/General/formStyles.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/scss/General/buttonStyles.min.css" asp-append-version="true" />
+}
+
+<div class="formContainer">
+    <h2 class="formTitle">Create New Cargo</h2>
+
+    @using (Html.BeginForm("Create", "Cargo"))
+    {
+        <div class="fieldContainer">
+            <label class="fieldLabel">Title</label>
+            @Html.TextBoxFor(m => m.Title, new { @class = "formField" })
+            @Html.ValidationMessageFor(m => m.Title, "", new { @class = "validationErrorText" })
+        </div>
+        <div class="fieldContainer">
+            <label class="fieldLabel">Weight</label>
+            @Html.TextBoxFor(m => m.Weight, new { @class = "formField", type = "number", min = "0", step = "1" })
+            @Html.ValidationMessageFor(m => m.Weight, "", new { @class = "validationErrorText" })
+        </div>
+        <div class="fieldContainer">
+            <label class="fieldLabel">Registration number</label>
+            @Html.TextBoxFor(m => m.RegistrationNumber, new { @class = "formField" })
+            @Html.ValidationMessageFor(m => m.RegistrationNumber, "", new { @class = "validationErrorText" })
+        </div>
+
+        <button type="submit" class="defaultButton">Create Cargo</button>
+    }
+</div>
+
+@section Scripts {
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.1.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.17.0/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.10/jquery.validate.unobtrusive.min.js"></script>
+}

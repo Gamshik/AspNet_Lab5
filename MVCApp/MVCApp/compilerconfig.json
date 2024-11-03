@@ -34,5 +34,9 @@
   {
     "outputFile": "wwwroot/scss/Home/index.css",
     "inputFile": "wwwroot/scss/Home/index.scss"
+  },
+  {
+    "outputFile": "wwwroot/scss/General/formStyles.css",
+    "inputFile": "wwwroot/scss/General/formStyles.scss"
   }
 ]

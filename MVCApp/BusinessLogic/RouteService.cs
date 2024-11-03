@@ -4,17 +4,20 @@ using Contracts.Repositories;
 using Contracts.Services;
 using Entities;
 using Entities.DTOs;
+using Entities.Exceptions;
 using Entities.Pagination;
 
 namespace BusinessLogic
 {
-    public class RouteService : BaseService<Route, RouteDto>, IRouteService
+    public class RouteService : BaseService<Route>, IRouteService
     {
-        public RouteService(IRouteRepository repository, IMapperService mapperService) : base(repository, mapperService)
+        private readonly ISettlementService _settlementService;
+        public RouteService(IRouteRepository repository, ISettlementService settlementService, IMapperService mapperService) : base(repository, mapperService)
         {
+            _settlementService = settlementService;
         }
 
-        public override PagedList<RouteDto> GetByPage(PaginationQueryParameters parameters)
+        public override PagedList<TDto> GetByPage<TDto>(PaginationQueryParameters parameters)
         {
             var routes = _repository
                 .GetAllWithDependencies()
@@ -23,9 +26,26 @@ namespace BusinessLogic
 
             var count = _repository.Count();
 
-            var routeDtos = _mapperService.Map<IEnumerable<Route>, IEnumerable<RouteDto>>(routes);
+            var routeDtos = _mapperService.Map<IEnumerable<Route>, IEnumerable<TDto>>(routes);
 
-            return new PagedList<RouteDto>(routeDtos.ToList(), count, parameters.page, parameters.pageSize);
+            return new PagedList<TDto>(routeDtos.ToList(), count, parameters.page, parameters.pageSize);
+        }
+        public override async Task<TDtoResult> CreateAsync<TDtoNewEntity, TDtoResult>(TDtoNewEntity dto)
+        {
+            var typedDto = dto as RouteCreateDto;
+
+            if (typedDto == null)
+                throw new BadRequestException("Dto is wrong format.");
+
+            var startSettlement = await _settlementService.GetByIdAsync<Settlement>(typedDto.StartSettlementId);
+            var endSettlement = await _settlementService.GetByIdAsync<Settlement>(typedDto.EndSettlementId);
+
+            var newRoute = _mapperService.Map<RouteCreateDto, Route>(typedDto);
+
+            newRoute.StartSettlement = startSettlement;
+            newRoute.EndSettlement = endSettlement;
+
+            return await base.CreateAsync<Route, TDtoResult>(newRoute);
         }
     }
 }

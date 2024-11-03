@@ -8,8 +8,8 @@ namespace MapperHelper.Profiles
     {
         public RouteProfile()
         {
-
             CreateMap<Route, RouteDto>();
+            CreateMap<RouteCreateDto, Route>().ReverseMap();
         }
     }
 }

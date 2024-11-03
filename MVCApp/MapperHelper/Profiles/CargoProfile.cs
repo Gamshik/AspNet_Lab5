@@ -9,6 +9,7 @@ namespace MapperHelper.Profiles
         public CargoProfile()
         {
             CreateMap<Cargo, CargoDto>();
+            CreateMap<CargoCreateDto, Cargo>().ReverseMap();
         }
     }
 }

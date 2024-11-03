@@ -3,20 +3,25 @@
     flex-direction: row;
     justify-content: space-between;
 
-    .pageSizeForm {
+    .tableHelperButtons {
         display: flex;
-        align-items: center;
+        gap: 20px;
 
-        .numberField {
-            width: 60px;
-            padding: 4px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            margin-right: 10px;
+        .pageSizeForm {
+            display: flex;
+            align-items: center;
 
-            &:focus {
-                outline: none;
-                border-color: #007bff;
+            .numberField {
+                width: 60px;
+                padding: 4px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                margin-right: 10px;
+
+                &:focus {
+                    outline: none;
+                    border-color: #007bff;
+                }
             }
         }
     }

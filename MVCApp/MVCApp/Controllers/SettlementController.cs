@@ -1,4 +1,5 @@
 ﻿using Contracts.Services;
+using Entities.DTOs;
 using Entities.Pagination;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,7 +20,7 @@ namespace MVCApp.Controllers
         [ResponseCache(CacheProfileName = "EntityCache")]
         public IActionResult Index([FromQuery] PaginationQueryParameters parameters)
         {
-            var settlements = _settlementService.GetByPage(parameters);
+            var settlements = _settlementService.GetByPage<SettlementDto>(parameters);
 
             if (settlements == null || !settlements.Any())
                 return NoContent();
@@ -32,6 +33,18 @@ namespace MVCApp.Controllers
             ViewBag.HavePrev = settlements.MetaData.HavePrev;
 
             return View(settlements);
+        }
+        [HttpGet("create", Name = "create-settlement-view")]
+        public IActionResult CreateView() => View();
+
+        [HttpPost("", Name = "create-settlement")]
+        public async Task<IActionResult> Create([FromForm] SettlementCreateDto dto)
+        {
+            if (!ModelState.IsValid)
+                return View("CreateView", dto);
+
+            await _settlementService.CreateAsync<SettlementCreateDto, SettlementDto>(dto);
+            return RedirectToAction("Index", new { page = 1, pageSize = 10 });
         }
     }
 }
