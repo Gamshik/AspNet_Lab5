@@ -8,7 +8,7 @@ using System.Linq.Expressions;
 
 namespace DbAccess.Repositories.Base
 {
-    public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : EntityBase
+    public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class, IEntityBase
     {
         protected readonly LogisticContext _context;
 

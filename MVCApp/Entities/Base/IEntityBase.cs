@@ -1,6 +1,6 @@
 ﻿namespace Entities.Base
 {
-    public class EntityBase : IEntityBase
+    public interface IEntityBase
     {
         public Guid Id { get; set; }
     }

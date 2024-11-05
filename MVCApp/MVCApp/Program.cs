@@ -4,7 +4,6 @@ using MVCApp.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews()
     .AddViewOptions(options =>
     {
@@ -13,7 +12,13 @@ builder.Services.AddControllersWithViews()
 
 builder.Services.ConfigureContext(builder);
 
+builder.Services.ConfigureIdentity();
+builder.Services.AddAuthorization();
+
+builder.Services.JwtConfigure(builder);
+
 builder.Services.ConfigureScopedDependencies();
+
 builder.Services.ConfigureMapper();
 
 builder.Services.ConfigureCacheProfiles();
@@ -37,6 +42,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

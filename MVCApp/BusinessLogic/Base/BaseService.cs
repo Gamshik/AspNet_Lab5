@@ -7,7 +7,7 @@ using Entities.Pagination;
 namespace BusinessLogic.Base
 {
     public class BaseService<TDb> : IBaseEntityService<TDb>
-        where TDb : EntityBase
+        where TDb : class, IEntityBase
     {
         protected readonly IRepositoryBase<TDb> _repository;
         protected readonly IMapperService _mapperService;

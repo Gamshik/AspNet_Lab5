@@ -4,7 +4,7 @@ using Entities.Pagination;
 namespace Contracts.Services.Base
 {
     public interface IBaseEntityService<TDb>
-        where TDb : EntityBase
+        where TDb : class, IEntityBase
     {
         IEnumerable<TDto> GetAll<TDto>();
         PagedList<TDto> GetByPage<TDto>(PaginationQueryParameters parameters);

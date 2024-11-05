@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 
 namespace Contracts.Repositories.Base
 {
-    public interface IRepositoryBase<T> where T : EntityBase
+    public interface IRepositoryBase<T> where T : class, IEntityBase
     {
         int Count();
         IQueryable<T> GetAll();

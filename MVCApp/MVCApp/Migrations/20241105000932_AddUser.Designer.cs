@@ -4,6 +4,7 @@ using DbAccess.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVCApp.Migrations
 {
     [DbContext(typeof(LogisticContext))]
-    partial class LogisticContextModelSnapshot : ModelSnapshot
+    [Migration("20241105000932_AddUser")]
+    partial class AddUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -171,15 +174,27 @@ namespace MVCApp.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "4f7517b1-3e8d-40a1-a3c4-8c62ddb85ed7",
+                            Id = "5fb7f523-d4cf-4062-a94f-5a633e5116f3",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "91c634ae-b4e9-45ce-b1a1-c7fc6724d6d8",
-                            Name = "User",
-                            NormalizedName = "USER"
+                            Id = "3a0483e7-c983-4a44-84c1-232cdf3bac36",
+                            Name = "Director",
+                            NormalizedName = "DIRECTOR"
+                        },
+                        new
+                        {
+                            Id = "aecd6866-9b29-4b72-a573-15fff6a9607d",
+                            Name = "Waiter",
+                            NormalizedName = "WAITER"
+                        },
+                        new
+                        {
+                            Id = "a11ba379-5ac9-4905-aa39-ea9e635e63b9",
+                            Name = "Chef",
+                            NormalizedName = "CHEF"
                         });
                 });
 
