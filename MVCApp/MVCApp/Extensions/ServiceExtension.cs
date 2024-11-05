@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -30,10 +31,13 @@ namespace MVCApp.Extensions
             services.AddScoped<ICargoRepository, CargoRepository>();
             services.AddScoped<IRouteRepository, RouteRepository>();
             services.AddScoped<ISettlementRepository, SettlementRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             services.AddScoped<ICargoService, CargoService>();
             services.AddScoped<IRouteService, RouteService>();
             services.AddScoped<ISettlementService, SettlementService>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthService, AuthService>();
         }
         public static void ConfigureMapper(this IServiceCollection services)
         {
@@ -42,6 +46,7 @@ namespace MVCApp.Extensions
                 new CargoProfile(),
                 new RouteProfile(),
                 new SettlementProfile(),
+                new UserProfile(),
             }));
 
             services.AddScoped<IMapper>(x => new Mapper(config));
@@ -88,7 +93,14 @@ namespace MVCApp.Extensions
                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 opt.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(opt =>
+            })
+            .AddCookie(opt => 
+            {
+                opt.LoginPath = "/login";
+                opt.AccessDeniedPath = "/login";
+                opt.Cookie.Name = "Bearer";
+            })
+            .AddJwtBearer(opt =>
             {
                 opt.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -100,6 +112,19 @@ namespace MVCApp.Extensions
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true
+                };
+
+                opt.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var token = context.Request.Cookies["Bearer"];
+                        if (!string.IsNullOrEmpty(token))
+                        {
+                            context.Token = token;
+                        }
+                        return Task.CompletedTask;
+                    }
                 };
             });
         }

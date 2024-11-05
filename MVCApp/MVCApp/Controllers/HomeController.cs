@@ -1,21 +1,21 @@
-using Contracts.Repositories;
+using Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MVCApp.Models;
 using System.Diagnostics;
 
 namespace MVCApp.Controllers
 {
+    [Authorize(Roles = "User")]
     [Route("")]
     [ApiController]
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ICargoRepository _cargoRepository;
 
-        public HomeController(ILogger<HomeController> logger, ICargoRepository cargoRepository)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _cargoRepository = cargoRepository;
         }
 
         public IActionResult Index()

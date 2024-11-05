@@ -21,9 +21,9 @@ namespace DbAccess.Repositories.Base
 
         public abstract IQueryable<T> GetAllWithDependencies();
 
-        public IQueryable<T> FindByCondition(Expression<Func<T, bool>> condition) =>
+        public virtual IQueryable<T> FindByCondition(Expression<Func<T, bool>> condition) =>
             _context.Set<T>().AsNoTracking().Where(condition);
-        public async Task<T> FindByIdAsync(Guid id)
+        public virtual async Task<T> FindByIdAsync(Guid id)
         {
             var entity = await _context.Set<T>().FirstOrDefaultAsync((entity) => entity.Id == id);
 
@@ -32,29 +32,29 @@ namespace DbAccess.Repositories.Base
 
             return entity;
         }
-        public IQueryable<T> GetAll() =>
+        public virtual IQueryable<T> GetAll() =>
             _context.Set<T>().AsNoTracking();
 
-        public async Task<T> CreateAsync(T entity)
+        public virtual async Task<T> CreateAsync(T entity)
         {
             _context.Set<T>().Add(entity);
             await SaveChangesAsync();
             return entity;
         }
 
-        public async Task<T> UpdateAsync(T entity)
+        public virtual async Task<T> UpdateAsync(T entity)
         {
             _context.Set<T>().Update(entity);
             await SaveChangesAsync();
             return entity;
         }
 
-        public async Task DeleteAsync(T entity)
+        public virtual async Task DeleteAsync(T entity)
         {
             _context.Set<T>().Remove(entity);
             await SaveChangesAsync();
         }
-        public async Task DeleteByIdAsync(Guid id)
+        public virtual async Task DeleteByIdAsync(Guid id)
         {
             var entity = await _context.Set<T>().FirstOrDefaultAsync(x => x.Id == id);
 
