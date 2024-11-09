@@ -2,13 +2,15 @@
 using Entities.Models.DTOs;
 using Entities.Pagination;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
+using MVCApp.Controllers.Attributes;
+using MVCApp.Controllers.Base;
 
 namespace MVCApp.Controllers
 {
+    [AuthorizeByRoles("Admin", "User")]
     [Route("settlements")]
     [ApiController]
-    public class SettlementController : Controller
+    public class SettlementController : BaseController
     {
         private readonly ISettlementService _settlementService;
 
@@ -67,7 +69,7 @@ namespace MVCApp.Controllers
         [HttpPost("update", Name = "update-settlement")]
         public async Task<IActionResult> Update([FromForm] SettlementUpdateDto dto)
         {
-            if (!ModelState.IsValid || dto.Id.ToString().IsNullOrEmpty())
+            if (!ModelState.IsValid || string.IsNullOrEmpty(dto.Id.ToString()))
                 return View("UpdateView", dto);
 
             await _settlementService.UpdateAsync<SettlementUpdateDto, SettlementDto>(dto);

@@ -43,7 +43,7 @@ namespace DbAccess.Repositories
         public async Task<User> CreateAsync(User user, string password, IEnumerable<string> roles)
         {
             var result = await _userManager.CreateAsync(user, password);
-            
+
             if (!result.Succeeded)
                 throw new Exception(result.Errors.First().Description);
 

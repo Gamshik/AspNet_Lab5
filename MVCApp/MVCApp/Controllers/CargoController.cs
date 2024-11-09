@@ -3,13 +3,15 @@ using Entities;
 using Entities.Models.DTOs;
 using Entities.Pagination;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
+using MVCApp.Controllers.Attributes;
+using MVCApp.Controllers.Base;
 
 namespace MVCApp.Controllers
 {
+    [AuthorizeByRoles("Admin", "User")]
     [Route("cargo")]
     [ApiController]
-    public class CargoController : Controller
+    public class CargoController : BaseController
     {
         private readonly ICargoService _cargoService;
 
@@ -69,7 +71,7 @@ namespace MVCApp.Controllers
         [HttpPost("update", Name = "update-cargo")]
         public async Task<IActionResult> Update([FromForm] CargoUpdateDto dto)
         {
-            if (!ModelState.IsValid || dto.Id.ToString().IsNullOrEmpty())
+            if (!ModelState.IsValid || string.IsNullOrEmpty(dto.Id.ToString()))
                 return View("UpdateView", dto);
 
             await _cargoService.UpdateAsync<CargoUpdateDto, CargoDto>(dto);

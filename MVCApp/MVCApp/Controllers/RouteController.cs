@@ -3,14 +3,16 @@ using Entities.Models.DTOs;
 using Entities.Pagination;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.IdentityModel.Tokens;
+using MVCApp.Controllers.Attributes;
+using MVCApp.Controllers.Base;
 using System.ComponentModel.DataAnnotations;
 
 namespace MVCApp.Controllers
 {
+    [AuthorizeByRoles("Admin", "User")]
     [Route("route")]
     [ApiController]
-    public class RouteController : Controller
+    public class RouteController : BaseController
     {
         private readonly IRouteService _routeService;
         private readonly ISettlementService _settlementService;
@@ -93,7 +95,7 @@ namespace MVCApp.Controllers
         [HttpPost("update", Name = "update-route")]
         public async Task<IActionResult> Update([FromForm] RouteUpdateDto dto)
         {
-            if (!ModelState.IsValid || dto.Id.ToString().IsNullOrEmpty())
+            if (!ModelState.IsValid || string.IsNullOrEmpty(dto.Id.ToString()))
                 return View("UpdateView", dto);
 
             await _routeService.UpdateAsync<RouteUpdateDto, RouteDto>(dto);

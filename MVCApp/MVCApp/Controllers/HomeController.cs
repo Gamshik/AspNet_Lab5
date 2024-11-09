@@ -1,22 +1,20 @@
 using Entities;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MVCApp.Controllers.Attributes;
+using MVCApp.Controllers.Base;
+using MVCApp.Controllers.Helpers;
 using MVCApp.Models;
 using System.Diagnostics;
 
 namespace MVCApp.Controllers
 {
-    [Authorize(Roles = "User")]
+    [AuthorizeByRoles("Admin", "User")]
     [Route("")]
     [ApiController]
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
-        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
+        public HomeController() { }
 
         public IActionResult Index()
         {

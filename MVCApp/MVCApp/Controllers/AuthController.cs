@@ -1,17 +1,13 @@
 ﻿using Contracts.Services;
-using Entities.Models.DTOs;
 using Entities.Models.DTOs.User;
-using Entities.Pagination;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.IdentityModel.Tokens;
-using System.ComponentModel.DataAnnotations;
+using MVCApp.Controllers.Base;
 
 namespace MVCApp.Controllers
 {
     [Route("")]
     [ApiController]
-    public class AuthController : Controller
+    public class AuthController : GuestController
     {
         private readonly IAuthService _authService;
 
@@ -30,11 +26,11 @@ namespace MVCApp.Controllers
             var token = await _authService.AuthorizeAsync(dto);
 
             if (token == null)
-                return View("LoginView");
+                return RedirectToAction("LoginView");
 
             Response.Cookies.Append("Bearer", token.Token.ToString(), new CookieOptions { HttpOnly = true, Expires = token.Expire, SameSite = SameSiteMode.Strict });
 
-            return View("~/Views/Home/Index.cshtml");
+            return RedirectToAction("Index", "Home");
         }
         [HttpGet("register", Name = "register-view")]
         public IActionResult RegisterView()
@@ -44,12 +40,12 @@ namespace MVCApp.Controllers
         [HttpPost("register", Name = "register")]
         public async Task<IActionResult> Register([FromForm] UserRegistrationDto dto)
         {
-            var isRegister = await _authService.RegisterAsync(dto, ["Admin"]);
+            var isRegister = await _authService.RegisterAsync(dto, ["User"]);
 
             if (!isRegister)
-                return View("RegisterView");
+                return RedirectToAction("RegisterView");
 
-            return View("LoginView");
+            return RedirectToAction("LoginView");
         }
     }
 }
