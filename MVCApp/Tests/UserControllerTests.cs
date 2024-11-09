@@ -1,14 +1,9 @@
-﻿using Moq;
-using Xunit;
-using Microsoft.AspNetCore.Mvc;
-using MVCApp.Controllers;
-using Contracts.Services;
+﻿using Contracts.Services;
 using Entities.Models.DTOs.User;
 using Entities.Pagination;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using Entities.Models.DTOs;
+using Microsoft.AspNetCore.Mvc;
+using Moq;
+using MVCApp.Controllers;
 
 public class UserControllerTests
 {
@@ -24,29 +19,29 @@ public class UserControllerTests
     }
 
     [Fact]
-    public void Index_ShouldReturnNoContent_WhenNoUsersFound()
+    public void IndexShouldReturnNoContentWhenNoUsersFound()
     {
-        // Arrange:
+        // Arrange
         var users = new PagedList<UserDto>(
-            new List<UserDto> {},
+            new List<UserDto> { },
             1, 1, 10
         );
 
         _mockUserService.Setup(service => service.GetByPage<UserDto>(It.IsAny<PaginationQueryParameters>()))
                         .Returns(users);
 
-        // Act: Call the controller action
+        // Act
         var result = _controller.Index(new PaginationQueryParameters());
 
-        // Assert: Ensure that the result is NoContent
+        // Assert
         var noContentResult = Assert.IsType<NoContentResult>(result);
         Assert.Equal(204, noContentResult.StatusCode);
     }
 
     [Fact]
-    public async Task Create_ShouldRedirectToIndex_WhenModelIsValid()
+    public async Task CreateShouldRedirectToIndexWhenModelIsValid()
     {
-        // Arrange: Create a valid DTO
+        // Arrange
         var dto = new UserRegistrationDto
         {
             FirstName = "Gleb",
@@ -59,16 +54,16 @@ public class UserControllerTests
         _mockAuthService.Setup(service => service.RegisterAsync(It.IsAny<UserRegistrationDto>(), It.IsAny<string[]>()))
                         .ReturnsAsync(true);
 
-        // Act: Call the Create method
+        // Act
         var result = await _controller.Create(dto);
 
-        // Assert: Ensure the result is a redirect to Index
+        // Assert
         var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
         Assert.Equal("Index", redirectToActionResult.ActionName);
     }
 
     [Fact]
-    public async Task Create_ShouldReturnView_WhenModelStateIsInvalid()
+    public async Task CreateShouldReturnViewWhenModelStateIsInvalid()
     {
         // Arrange
         var dto = new UserRegistrationDto
@@ -92,7 +87,7 @@ public class UserControllerTests
     }
 
     [Fact]
-    public async Task Delete_ShouldRedirectToIndex_WhenUserIsDeleted()
+    public async Task DeleteShouldRedirectToIndexWhenUserIsDeleted()
     {
         // Arrange
         var dto = new UserDeleteDto { Id = Guid.NewGuid() };
@@ -111,7 +106,7 @@ public class UserControllerTests
     }
 
     [Fact]
-    public async Task Update_ShouldReturnView_WhenModelStateIsInvalid()
+    public async Task UpdateShouldReturnViewWhenModelStateIsInvalid()
     {
         // Arrange
         var dto = new UserUpdateDto
@@ -126,19 +121,19 @@ public class UserControllerTests
 
         _controller.ModelState.AddModelError("SecurityStamp", "Security Stamp is required.");
 
-        // Act: Call the Update method
+        // Act
         var result = await _controller.Update(dto);
 
-        // Assert: Ensure the result is a View with the same model
+        // Assert
         var viewResult = Assert.IsType<ViewResult>(result);
         Assert.Equal("UpdateView", viewResult.ViewName);
         Assert.Equal(dto, viewResult.Model);
     }
 
     [Fact]
-    public async Task Update_ShouldRedirectToIndex_WhenModelIsValid()
+    public async Task UpdateShouldRedirectToIndexWhenModelIsValid()
     {
-        // Arrange: Create a valid DTO
+        // Arrange
         var dto = new UserUpdateDto
         {
             Id = Guid.NewGuid(),
@@ -159,10 +154,10 @@ public class UserControllerTests
                             Email = dto.Email
                         });
 
-        // Act: Call the Update method
+        // Act
         var result = await _controller.Update(dto);
 
-        // Assert: Ensure the result is a redirect to Index
+        // Assert
         var redirectToActionResult = Assert.IsType<RedirectToActionResult>(result);
         Assert.Equal("Index", redirectToActionResult.ActionName);
         Assert.Equal(1, redirectToActionResult.RouteValues["page"]);
