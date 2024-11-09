@@ -14,10 +14,12 @@ namespace MVCApp.Controllers
     public class UserController : BaseController
     {
         private readonly IUserService _userService;
+        private readonly IAuthService _authService;
 
-        public UserController(IUserService userService)
+        public UserController(IUserService userService, IAuthService authService)
         {
             _userService = userService;
+            _authService = authService;
         }
 
         [HttpGet("", Name = "users")]
@@ -47,16 +49,16 @@ namespace MVCApp.Controllers
         [HttpGet("create", Name = "create-user-view")]
         public IActionResult CreateView() => View();
         [HttpPost("create", Name = "create-user")]
-        public async Task<IActionResult> Create([FromForm] SettlementCreateDto dto)
+        public async Task<IActionResult> Create([FromForm] UserRegistrationDto dto)
         {
             if (!ModelState.IsValid)
                 return View("CreateView", dto);
 
-            await _userService.CreateAsync<SettlementCreateDto, SettlementDto>(dto);
+            await _authService.RegisterAsync(dto, ["User"]);
             return RedirectToAction("Index", new { page = 1, pageSize = 10 });
         }
         [HttpPost("delete-user", Name = "delete-user")]
-        public async Task<IActionResult> Delete([FromForm] SettlementDeleteDto dto)
+        public async Task<IActionResult> Delete([FromForm] UserDeleteDto dto)
         {
             await _userService.DeleteByIdAsync(dto.Id);
             return RedirectToAction("Index", new { page = 1, pageSize = 10 });

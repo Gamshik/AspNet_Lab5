@@ -30,7 +30,7 @@
                 <li><a asp-route="cargos" asp-all-route-data="defaultPaginationParams">Cargo</a></li>
                 <li><a asp-route="routes" asp-all-route-data="defaultPaginationParams">Route</a></li>
                 <li><a asp-route="settlements" asp-all-route-data="defaultPaginationParams">Settlement</a></li>
-                <li><a href="/">Logout</a></li>
+                <li><a id="logout-btn">Logout</a></li>
             </ul>
         </nav>
     </header>
@@ -39,5 +39,6 @@
     </div>
     @await Html.PartialAsync("_ValidationScriptsPartial")   
     <script src="~/js/deleteEntityButtonFunctions.js"></script>
+    <script src="~/js/LogOut.js"></script>
 </body>
 </html>

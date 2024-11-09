@@ -8,7 +8,7 @@
 <div class="formContainer">
     <h2 class="formTitle">Register</h2>
 
-    @using (Html.BeginForm("register", "Auth", FormMethod.Post))
+    @using (Html.BeginForm("create", "User", FormMethod.Post))
     {
         <div class="fieldContainer">
             @Html.ValidationSummary(false, "", new { @class = "validationErrorText" })
@@ -44,6 +44,6 @@
             @Html.ValidationMessageFor(m => m.Password, "", new { @class = "validationErrorText" })
         </div>
 
-        <button type="submit" class="defaultButton">Register</button>
+        <button type="submit" class="defaultButton">Create</button>
     }
 </div>

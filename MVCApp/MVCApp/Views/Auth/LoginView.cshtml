@@ -8,7 +8,7 @@
 <div class="formContainer">
     <h2 class="formTitle">Login</h2>
 
-    @using (Html.BeginForm("login", "YourControllerName", FormMethod.Post))
+    @using (Html.BeginForm("login", "Auth", FormMethod.Post))
     {
         <div class="fieldContainer">
             @Html.ValidationSummary(false, "", new { @class = "validationErrorText" })
