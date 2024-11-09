@@ -1,4 +1,5 @@
 ﻿using Contracts.Services;
+using Entities.Exceptions;
 using Entities.Models.DTOs.User;
 using Microsoft.AspNetCore.Mvc;
 using MVCApp.Controllers.Base;
@@ -23,14 +24,21 @@ namespace MVCApp.Controllers
         [HttpPost("login", Name = "login")]
         public async Task<IActionResult> Login([FromForm] UserAuthorizationDto dto)
         {
-            var token = await _authService.AuthorizeAsync(dto);
+            try
+            {
+                var token = await _authService.AuthorizeAsync(dto);
 
-            if (token == null)
+                if (token == null)
+                    return RedirectToAction("LoginView");
+
+                Response.Cookies.Append("Bearer", token.Token.ToString(), new CookieOptions { HttpOnly = true, Expires = token.Expire, SameSite = SameSiteMode.Strict });
+
+                return RedirectToAction("Index", "Home");
+            }
+            catch (NotFoundException ex)
+            {
                 return RedirectToAction("LoginView");
-
-            Response.Cookies.Append("Bearer", token.Token.ToString(), new CookieOptions { HttpOnly = true, Expires = token.Expire, SameSite = SameSiteMode.Strict });
-
-            return RedirectToAction("Index", "Home");
+            }
         }
         [HttpGet("register", Name = "register-view")]
         public IActionResult RegisterView()

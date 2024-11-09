@@ -1,5 +1,4 @@
 ﻿using Contracts.Services;
-using Entities.Models.DTOs;
 using Entities.Models.DTOs.User;
 using Entities.Pagination;
 using Microsoft.AspNetCore.Mvc;
@@ -66,16 +65,16 @@ namespace MVCApp.Controllers
         [HttpGet("update", Name = "update-user-view")]
         public async Task<IActionResult> UpdateView([FromQuery] Guid id)
         {
-            var settlement = await _userService.GetByIdAsync<SettlementUpdateDto>(id);
-            return View(settlement);
+            var user = await _userService.GetByIdAsync<UserUpdateDto>(id);
+            return View(user);
         }
         [HttpPost("update", Name = "update-user")]
-        public async Task<IActionResult> Update([FromForm] SettlementUpdateDto dto)
+        public async Task<IActionResult> Update([FromForm] UserUpdateDto dto)
         {
             if (!ModelState.IsValid || string.IsNullOrEmpty(dto.Id.ToString()))
                 return View("UpdateView", dto);
 
-            await _userService.UpdateAsync<SettlementUpdateDto, SettlementDto>(dto);
+            await _userService.UpdateAsync<UserUpdateDto, UserDto>(dto);
             return RedirectToAction("Index", new { page = 1, pageSize = 10 });
         }
     }

@@ -56,7 +56,7 @@ namespace DbAccess.Repositories.Base
         }
         public virtual async Task DeleteByIdAsync(Guid id)
         {
-            var entity = await _context.Set<T>().FirstOrDefaultAsync(x => x.Id == id);
+            var entity = await _context.Set<T>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
 
             if (entity == null)
                 throw new NotFoundException("Entity is not found.");

@@ -9,7 +9,7 @@ namespace Contracts.Services
         bool IsValidToken(string token, out JwtSecurityToken? jwtSecurityToken);
         bool IsValidRoles(JwtSecurityToken jwtToken, IEnumerable<string> roles);
         bool IsAdmin(JwtSecurityToken jwtToken);
-        Task<Jwt?> AuthorizeAsync(UserAuthorizationDto userAuthorizationDto, CancellationToken cancellationToken = default);
-        Task<bool> RegisterAsync(UserRegistrationDto userRegistrationDto, IEnumerable<string> roles, CancellationToken cancellationToken = default);
+        Task<Jwt?> AuthorizeAsync(UserAuthorizationDto userAuthorizationDto);
+        Task<bool> RegisterAsync(UserRegistrationDto userRegistrationDto, IEnumerable<string> roles);
     }
 }

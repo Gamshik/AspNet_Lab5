@@ -5,6 +5,7 @@ using Entities;
 using Entities.Exceptions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace DbAccess.Repositories
 {
@@ -19,9 +20,11 @@ namespace DbAccess.Repositories
         public override IQueryable<User> GetAllWithDependencies() =>
             _context.Users
                 .AsNoTracking();
+        public override IQueryable<User> FindByCondition(Expression<Func<User, bool>> condition) =>
+            _userManager.Users.AsNoTracking().Where(condition);
         public override async Task<User> FindByIdAsync(Guid id)
         {
-            var entity = await _userManager.FindByIdAsync(id.ToString());
+            var entity = await _userManager.Users.AsNoTracking().FirstOrDefaultAsync(u => u.Id == id);
 
             if (entity == null)
                 throw new NotFoundException("Entity is not found.");
@@ -58,11 +61,21 @@ namespace DbAccess.Repositories
         }
         public override async Task<User> UpdateAsync(User entity)
         {
-            var result = await _userManager.UpdateAsync(entity);
+            var existingUser = _context.Users.FirstOrDefault(u => u.Id == entity.Id);
+
+            if (existingUser == null)
+                throw new NotFoundException("Entity is not found.");
+
+            existingUser.FirstName = entity.FirstName;
+            existingUser.LastName = entity.LastName;
+            existingUser.UserName = entity.UserName;
+            existingUser.Email = entity.Email;
+
+            var result = await _userManager.UpdateAsync(existingUser);
 
             if (!result.Succeeded)
                 throw new Exception(result.Errors.First().Description);
-            return entity;
+            return existingUser;
         }
         public override async Task DeleteAsync(User entity)
         {

@@ -10,6 +10,7 @@ namespace MapperHelper.Profiles
         {
             CreateMap<UserRegistrationDto, User>();
             CreateMap<User, UserDto>();
+            CreateMap<User, UserUpdateDto>().ReverseMap();
         }
     }
 }

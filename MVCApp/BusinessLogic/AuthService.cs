@@ -50,7 +50,7 @@ namespace BusinessLogic
             };
         }
 
-        public async Task<Jwt?> AuthorizeAsync(UserAuthorizationDto userAuthorizationDto, CancellationToken cancellationToken = default)
+        public async Task<Jwt?> AuthorizeAsync(UserAuthorizationDto userAuthorizationDto)
         {
             var userByEmail = await _userRepository.FindByEmailAsync(userAuthorizationDto.Email);
 
@@ -64,7 +64,7 @@ namespace BusinessLogic
             var roles = await _userRepository.GetUserRolesAsync(userByEmail);
             return CreateJwtToken(id, roles);
         }
-        public async Task<bool> RegisterAsync(UserRegistrationDto userRegistrationDto, IEnumerable<string> roles, CancellationToken cancellationToken = default)
+        public async Task<bool> RegisterAsync(UserRegistrationDto userRegistrationDto, IEnumerable<string> roles)
         {
 
             var user = _mapperService.Map<UserRegistrationDto, User>(userRegistrationDto);

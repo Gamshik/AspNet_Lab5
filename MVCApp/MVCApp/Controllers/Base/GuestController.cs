@@ -1,5 +1,4 @@
-﻿using Contracts.Services;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using MVCApp.Controllers.Helpers;
 

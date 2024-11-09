@@ -1,7 +1,4 @@
-﻿using Entities.Models.DTOs;
-using Entities.Pagination;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using MVCApp.Controllers.Attributes;
 
 namespace MVCApp.Controllers
@@ -18,7 +15,7 @@ namespace MVCApp.Controllers
             {
                 Expires = DateTime.UtcNow.AddDays(-1),
                 HttpOnly = true,
-                Secure = true, 
+                Secure = true,
                 Path = "/"
             });
 
